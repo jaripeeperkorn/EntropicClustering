@@ -63,9 +63,11 @@ def entropic_clustering_VL(variant_log_input, num_clusters, initialization = '++
             curr_activity_counts, curr_edge_counts = utils.update_dfg(curr_activity_counts, curr_edge_counts, variant, occurrence)
             if opt == 'full_cluster':
                 curr_ER = entropic_relevance.get_ER(curr_clus, curr_activity_counts, curr_edge_counts)
-            if opt == 'trace':
+            elif opt == 'trace':
                 tracelog = {variant: occurrence}
                 curr_ER = entropic_relevance.get_ER(tracelog, curr_activity_counts, curr_edge_counts)
+            else:
+                raise ValueError("opt has to be 'full_cluster' or 'trace'")
             if curr_ER < best_ER:
                 best_ER = curr_ER
                 best_cluster_index = k

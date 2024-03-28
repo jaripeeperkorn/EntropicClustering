@@ -99,7 +99,7 @@ def get_seeds(variant_log, num_clusters, version= "++"):
             new_seed = sample_seed_distance_based(get_distances_to_closest_seed(temp_variant_log, seeds, distance_function="ER"))
             seeds.append(copy.deepcopy(new_seed))
             del temp_variant_log[new_seed]
-    if version == "++_norm":
+    elif version == "++_norm":
         #add first seed randomly
         first_seed = random.choice(list(temp_variant_log.keys()))
         seeds.append(copy.deepcopy(first_seed))
@@ -109,8 +109,10 @@ def get_seeds(variant_log, num_clusters, version= "++"):
             new_seed = sample_seed_distance_based(get_distances_to_closest_seed(temp_variant_log, seeds, distance_function="ER_norm"))
             seeds.append(copy.deepcopy(new_seed))
             del temp_variant_log[new_seed]
-    if version == "random":
+    elif version == "random":
         seeds = random.sample(list(temp_variant_log.keys()), num_clusters)
+    else:
+        raise ValueError("verion has to be '++' or '++_norm' or 'random'")
     return seeds
 
 def intialize_clusters(variant_log, seeds):
