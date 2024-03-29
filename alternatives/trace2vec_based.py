@@ -167,9 +167,6 @@ def cluster_t2v(input_variant_log, log, num_clus, cluster_version, distance, vec
     model = train_model(log_tagged, vector_size = vector_size, window_size=window_size, min_count=min_count, dm=dm, epochs=epochs)
     print("training done") 
     tags_variants = get_tags(keys)
-    print(tags_variants)
-    for tag in tags_variants:
-        print(model.dv[tag])
     vector_log_variants = [model.dv[tag] for tag in tags_variants]
 
     #todo add other options?
