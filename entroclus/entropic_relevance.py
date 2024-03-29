@@ -41,11 +41,11 @@ def get_ER_normalized(variant_log, activity_counts, edge_counts):
     total_occurences = 0
     for variant, occurrence in variant_log.items():
         # Calculate the replay probability of the trace with the real dfg 
-        prob = utils.temp_get_probability(activity_counts, edge_counts, variant)
+        prob = utils.get_probability(activity_counts, edge_counts, variant)
         # Get a new dfg, which is only discovered using the varint, used for normalization
         act_counts_var, edge_count_var = utils.get_dfg({variant:1})
         # The probability of this dfg is the maximal probability possible for this trace when using dfg's, not always 1 because of loops
-        maximal_prob = utils.temp_get_probability(act_counts_var, edge_count_var, variant)
+        maximal_prob = utils.get_probability(act_counts_var, edge_count_var, variant)
         # Get normalized probability, subtracting the minimal ER at the end (obtained with maximal probability) would be the same
         prob_norm = prob/maximal_prob
         ER_sum += (-math.log(prob_norm, 2))*occurrence
