@@ -10,7 +10,7 @@ from sklearn import preprocessing
 import gensim
 from gensim.models.doc2vec import TaggedDocument
 
-import entroclus.utils as utils
+from ..entroclus import utils as utils
 
 def sequences_from_dataframe(df):
     """
@@ -33,7 +33,7 @@ def sequences_from_dataframe(df):
     #! xes importer pm4py automatically puts cases together and orders on timestamp, but better to fix this in future to make sure
     #df_sorted = df.sort_values(by='time:timestamp')
     df_sorted = df
-    # Group by 'case:concept:name' to keep sequences together
+    # Group by 'case:concept:name' (case id's) to keep sequences together
     grouped = df_sorted.groupby('case:concept:name')
     # Initialize an empty list to store sequences
     sequences = []
@@ -41,7 +41,7 @@ def sequences_from_dataframe(df):
     for group_name, group_df in grouped:
         # Sort the group by 'time:timestamp'
         group_df_sorted = group_df.sort_values(by='time:timestamp')  
-        # Extract the sequence of concept names for the current group
+        # Extract the sequence of concept names (activity labels) for the current group
         sequence = list(group_df_sorted['concept:name'])
         # Append the sequence to the list of sequences
         sequences.append(sequence)

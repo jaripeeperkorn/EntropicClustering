@@ -1,7 +1,7 @@
 import pandas
 
-import entroclus.entropic_clustering_variants as entropic_clustering_variants
-import entroclus.utils as utils
+from ..entroclus import entropic_clustering_variants as entropic_clustering_variants
+from ..entroclus import utils as utils
 
 def cluster(input, num_clusters, outputshape='log', variant='regular', initialization = '++', opt = 'trace'):
     """

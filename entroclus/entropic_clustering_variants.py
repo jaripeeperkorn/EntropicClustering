@@ -1,6 +1,6 @@
-import entroclus.utils as utils
-import entroclus.entropic_relevance as entropic_relevance
-import entroclus.entropic_clustering_utils as entropic_clustering_utils
+from ..entroclus import utils as utils
+from ..entroclus import entropic_relevance as entropic_relevance
+from ..entroclus import entropic_clustering_utils as entropic_clustering_utils
 import copy
 
 def add_and_remove_variant(clusters, variant_log, variant, occurrence, cluster_index):
@@ -113,6 +113,7 @@ def get_worst_cluster_and_remove(clusters):
         c_activity_counts, c_edge_counts = utils.get_dfg(c)
         c_ER = entropic_relevance.get_ER(c, c_activity_counts, c_edge_counts)
         if c_ER > current_highest:
+            current_highest = c_ER
             worst = c
     clusters.remove(worst)
     return worst, clusters

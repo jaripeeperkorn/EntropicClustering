@@ -1,4 +1,4 @@
-import entroclus.utils as utils
+from ..entroclus import utils as utils
 
 import copy, random
 

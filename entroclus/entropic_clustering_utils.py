@@ -1,5 +1,5 @@
-import entroclus.utils as utils
-import entroclus.entropic_relevance as entropic_relevance
+from ..entroclus import utils as utils
+from ..entroclus import entropic_relevance as entropic_relevance
 
 import random
 import copy
