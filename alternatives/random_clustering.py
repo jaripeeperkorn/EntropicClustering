@@ -68,7 +68,7 @@ def cluster(log, num_clus, variant='equisized', outputshape='log'):
     variant_log_input = utils.get_variant_log(log)
     if variant == 'equisized':
         clusters_vl = get_random_clusters_equisized(variant_log_input, num_clus)
-    else:
+    elif variant == 'random':
         clusters_vl = get_random_clusters(variant_log_input, num_clus)
     if outputshape == 'log':
         return [utils.filter_log_with_vl(log, cluster_vl) for cluster_vl in clusters_vl]

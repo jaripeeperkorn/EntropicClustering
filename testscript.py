@@ -1,0 +1,32 @@
+from entroclus import entropic_clustering
+from alternatives import frequency_based
+from alternatives import random_clustering
+from alternatives import trace2vec_based
+
+from evaluation import metrics
+
+def get_clusters(log, n_clus, type = 'entropic_clustering'):
+    #for now just used ++ variant not random etc
+    if type == 'entropic_clustering':
+        clusters = entropic_clustering.cluster(log, n_clus, outputshape='log', variant='regular', initialization = '++', opt = 'trace')
+    if type == 'entropic_clustering_split':
+        clusters = entropic_clustering.cluster(log, n_clus, outputshape='log', variant='split', initialization = '++', opt = 'trace')
+    if type == "frequency_based":
+        clusters = frequency_based.cluster(log, n_clus, outputshape='log', version='k-means++', distance='normalized')
+    if type == random_clustering:
+        clusters = random_clustering(log, n_clus, variant='random', outputshape='log')
+    if type == 'trace2vec_based':
+        clusters = trace2vec_based.cluster(log, n_clus, cluster_version='k-means++', distance='normalized', 
+                                          vector_size=None, window_size=2, min_count=0, dm=0, epochs=200, outputshape='log')
+    return clusters
+
+def do_one_experiment(log, n_clus, type = 'entropic_clustering'):
+    clusters = get_clusters(log, n_clus, type)
+    full_results = metrics.get_non_stochastic_metrics(log)
+    print("Full log: ", full_results)
+    full_results_stoch = metrics.get_stochastic_metrics(log)
+    print("Full log: ", full_results_stoch)
+    for i in range(0,n_clus):
+        print("Cluster: ", metrics.get_non_stochastic_metrics(clusters[i]))
+        print("Cluster: ", metrics.get_non_stochastic_metrics(clusters[i]))
+
