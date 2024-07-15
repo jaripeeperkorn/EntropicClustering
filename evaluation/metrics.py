@@ -1,0 +1,35 @@
+import pm4py
+from ..entroclus import utils as utils
+from ..entroclus import entropic_relevance as entropic_relevance
+
+def get_non_stochastic_metrics(log):
+    '''
+    Calculate non-stochastic metrics based on token-based replay and alignments for a given log or cluster.
+
+    Parameters:
+    - log: Event log or cluster for analysis
+
+    Returns:
+    - Dictionary containing replay fitness, replay precision, alignment fitness, and alignment precision
+    '''
+    net, im, fm = pm4py.discover_petri_net_inductive(log, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
+    fitness_tbr = pm4py.fitness_token_based_replay(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')['log_fitness']
+    precision_tbr = pm4py.precision_token_based_replay(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
+    fitness_alignments = pm4py.fitness_alignments(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')['log_fitness']
+    precision_alignments = pm4py.precision_alignments(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
+    return {'replay_fitness': fitness_tbr, 'replay_precision': precision_tbr, 'align_fitness': fitness_alignments, 'align_precision': precision_alignments}
+
+def get_stochastic_metrics(log):
+    """
+    Calculate the Entropic Relevance (ER) metric for a given log or cluster.
+
+    Parameters:
+    - log (pm4py.objects.log.obj.EventLog): The event log or cluster for which to calculate the ER metric.
+
+    Returns:
+    - dict: A dictionary containing the ER metric value.
+    """
+    variant_log = utils.get_variant_log(log)
+    activity_counts, edge_counts = utils.get_dfg(variant_log)
+    ER = entropic_relevance.get_ER(variant_log, activity_counts, edge_counts)
+    return {'ER': ER}
