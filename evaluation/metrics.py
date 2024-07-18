@@ -2,17 +2,26 @@ import pm4py
 from ..entroclus import utils as utils
 from ..entroclus import entropic_relevance as entropic_relevance
 
-def get_non_stochastic_metrics(log):
+def get_non_stochastic_metrics(log, discovery = 'inductive'):
     '''
     Calculate non-stochastic metrics based on token-based replay and alignments for a given log or cluster.
 
     Parameters:
     - log: Event log or cluster for analysis
+    - discovery:  The name of the discovery algorithm used
 
     Returns:
     - Dictionary containing replay fitness, replay precision, alignment fitness, and alignment precision
     '''
-    net, im, fm = pm4py.discover_petri_net_inductive(log, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
+    #discovery of a petri net with inductive miner
+    
+    if discovery == 'inductive':
+        #! to do CHECK NOISE THRESHOLD VALUE
+        net, im, fm = pm4py.discover_petri_net_inductive(log, noise_threshold = 0.8, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
+    if discovery == 'alpha':
+        net, im, fm = pm4py.discover_petri_net_alpha(log, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
+    if discovery == 'ilp':
+        net, im, fm = pm4py.discover_petri_net_ilp(log, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
     fitness_tbr = pm4py.fitness_token_based_replay(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')['log_fitness']
     precision_tbr = pm4py.precision_token_based_replay(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
     fitness_alignments = pm4py.fitness_alignments(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')['log_fitness']
