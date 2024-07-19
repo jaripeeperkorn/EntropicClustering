@@ -22,10 +22,6 @@ def get_clusters(log, n_clus, type = 'entropic_clustering'):
 
 def do_one_experiment(log, n_clus, type = 'entropic_clustering'):
     clusters = get_clusters(log, n_clus, type)
-    full_results = metrics.get_non_stochastic_metrics(log)
-    print("Full log: ", full_results)
-    full_results_stoch = metrics.get_stochastic_metrics(log)
-    print("Full log: ", full_results_stoch)
     for i in range(0,n_clus):
         print("Cluster: ", metrics.get_non_stochastic_metrics(clusters[i]))
         print("Cluster: ", metrics.get_stochastic_metrics(clusters[i]))
@@ -35,3 +31,7 @@ def test_all_types(log, n_clus):
     for type in types:
         print("########################---", type, "---########################")
         do_one_experiment(log, n_clus, type = type)
+    full_results = metrics.get_non_stochastic_metrics(log)
+    print("Full log: ", full_results)
+    full_results_stoch = metrics.get_stochastic_metrics(log)
+    print("Full log: ", full_results_stoch)

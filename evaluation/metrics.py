@@ -8,7 +8,7 @@ def get_non_stochastic_metrics(log, discovery = 'inductive'):
 
     Parameters:
     - log: Event log or cluster for analysis
-    - discovery:  The name of the discovery algorithm used
+    - discovery:  The name of the discovery algorithm used (default inductive miner)
 
     Returns:
     - Dictionary containing replay fitness, replay precision, alignment fitness, and alignment precision
@@ -17,16 +17,18 @@ def get_non_stochastic_metrics(log, discovery = 'inductive'):
     
     if discovery == 'inductive':
         #! to do CHECK NOISE THRESHOLD VALUE
-        net, im, fm = pm4py.discover_petri_net_inductive(log, noise_threshold = 0.8, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
+        net, im, fm = pm4py.discover_petri_net_inductive(log, noise_threshold = 0.2, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
     if discovery == 'alpha':
         net, im, fm = pm4py.discover_petri_net_alpha(log, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
     if discovery == 'ilp':
         net, im, fm = pm4py.discover_petri_net_ilp(log, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
     fitness_tbr = pm4py.fitness_token_based_replay(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')['log_fitness']
     precision_tbr = pm4py.precision_token_based_replay(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
-    fitness_alignments = pm4py.fitness_alignments(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')['log_fitness']
-    precision_alignments = pm4py.precision_alignments(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
-    return {'replay_fitness': fitness_tbr, 'replay_precision': precision_tbr, 'align_fitness': fitness_alignments, 'align_precision': precision_alignments}
+    return {'replay_fitness': fitness_tbr, 'replay_precision': precision_tbr}
+    #! re evaluate if we want to calculate these
+    #fitness_alignments = pm4py.fitness_alignments(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')['log_fitness']
+    #precision_alignments = pm4py.precision_alignments(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
+    #return {'replay_fitness': fitness_tbr, 'replay_precision': precision_tbr, 'align_fitness': fitness_alignments, 'align_precision': precision_alignments}
 
 def get_stochastic_metrics(log):
     """
@@ -40,5 +42,6 @@ def get_stochastic_metrics(log):
     """
     variant_log = utils.get_variant_log(log)
     activity_counts, edge_counts = utils.get_dfg(variant_log)
+    #! for now it doezs not really make sense to split this into entropicc precision and fitness (as the automata coming from log and model is the same)
     ER = entropic_relevance.get_ER(variant_log, activity_counts, edge_counts)
     return {'ER': ER}
