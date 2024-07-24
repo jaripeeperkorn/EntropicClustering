@@ -41,7 +41,8 @@ def get_stochastic_metrics(log):
     - dict: A dictionary containing the ER metric value.
     """
     variant_log = utils.get_variant_log(log)
+    #! for now it does not really make sense to split this into entropicc precision and fitness (as the automata coming from log and model is the same)
+    #Getting ER for log and DFG wiht full behavior, no filter
     activity_counts, edge_counts = utils.get_dfg(variant_log)
-    #! for now it doezs not really make sense to split this into entropicc precision and fitness (as the automata coming from log and model is the same)
     ER = entropic_relevance.get_ER(variant_log, activity_counts, edge_counts)
     return {'ER': ER}

@@ -3,7 +3,6 @@
 
 
 
-
 '''
 from pm4py.algo.conformance.tokenreplay.variants import token_replay
 from pm4py.statistics.variants.log import get as variants_module
