@@ -89,15 +89,14 @@ def get_clusters(log, n_clus, method = 'entropic_clustering'):
         raise ValueError(f"Unknown clustering method: {method}")
     return clusters
 
-for i in range(2, 10):
-    test_all_methods('Helpdesk.xes', i)
-
-for i in range(2, 10):
-    test_all_methods('Sepsis.xes.gz', i)
+#for i in range(2, 10):
+    #test_all_methods('Helpdesk.xes', i)
 
 for i in range(2, 10):
     test_all_methods('RTFM.xes', i)
 
+#for i in range(2, 10):
+#    test_all_methods('Sepsis.xes.gz', i)
 
 
 

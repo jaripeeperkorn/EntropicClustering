@@ -102,4 +102,4 @@ def generate_plots_from_results(logname, max_clusters, output_dir='experimental_
         plot_metric_for_all_methods(valid_csv_files, metric, output_dir)
 
 # Example usage:
-generate_plots_from_results('Helpdesk', 7)
+generate_plots_from_results('Helpdesk', 10)
