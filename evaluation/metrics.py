@@ -4,6 +4,8 @@ from entroclus import entropic_relevance as entropic_relevance
 
 from evaluation.tade_conformance import TADE
 
+from evaluation import graph_simplicity_metrics as gsm
+
 
 def get_non_stochastic_metrics(log, discovery = 'inductive'):
     '''
@@ -54,3 +56,24 @@ def get_stochastic_metrics(log):
     tade.train(log)
     tade_fitness = tade.fitness(log)
     return {'ER': ER, 'tade_fitness': tade_fitness}
+
+
+def get_graph_simplicity_metrics(log):
+    """
+    Calculate the graph simplicity metrics for a given log or cluster.
+
+    Parameters:
+    - log (pm4py.objects.log.obj.EventLog): The event log or cluster for which to calculate the graph simplicity metrics.
+
+    Returns:
+    - dict: A dictionary containing the graph simplicity metrics.
+    """
+    variant_log = utils.get_variant_log(log)
+    activity_counts, edge_counts = utils.get_dfg(variant_log)
+
+    # Calculate the graph simplicity metrics
+    graph_density = gsm.graph_density(activity_counts, edge_counts)
+    graph_entropy = gsm.graph_entropy(activity_counts, edge_counts)
+    return {'graph_density': graph_density, 'graph_entropy': graph_entropy}
+
+

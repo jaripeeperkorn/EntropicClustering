@@ -23,14 +23,17 @@ def get_clusters(log, n_clus, type = 'entropic_clustering'):
     return clusters
 
 def do_one_experiment(log, n_clus, type = 'entropic_clustering'):
-    #baseline = metrics.get_non_stochastic_metrics(log)
-    #print("Baseline: ", baseline)
+    baseline = metrics.get_non_stochastic_metrics(log)
+    print("Baseline: ", baseline)
     baseline_stoch = metrics.get_stochastic_metrics(log)
     print("Baseline: ", baseline_stoch)
+    baseline_graph_simplicity = metrics.get_graph_simplicity_metrics(log)
+    print("Baseline: ", baseline_graph_simplicity)
     clusters = get_clusters(log, n_clus, type)
     for i in range(0,n_clus):
         print("Cluster: ", metrics.get_non_stochastic_metrics(clusters[i]))
         print("Cluster: ", metrics.get_stochastic_metrics(clusters[i]))
+        print("Cluster: ", metrics.get_graph_simplicity_metrics(clusters[i]))
 
 def test_all_types(log, n_clus):
     types = ['entropic_clustering', 'entropic_clustering_split', 'frequency_based', 'random_clustering', 'trace2vec_based']
@@ -45,4 +48,4 @@ def test_all_types(log, n_clus):
 log = pm4py.read_xes('Helpdesk.xes')
 do_one_experiment(log, 3, type = 'entropic_clustering')
 
-test_all_types(log, 3)
+#test_all_types(log, 3)
