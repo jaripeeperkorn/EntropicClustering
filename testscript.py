@@ -5,6 +5,8 @@ from alternatives import trace2vec_based
 
 from evaluation import metrics
 
+import pm4py
+
 def get_clusters(log, n_clus, type = 'entropic_clustering'):
     #for now just used ++ variant not random etc
     if type == 'entropic_clustering':
@@ -21,8 +23,8 @@ def get_clusters(log, n_clus, type = 'entropic_clustering'):
     return clusters
 
 def do_one_experiment(log, n_clus, type = 'entropic_clustering'):
-    baseline = metrics.get_non_stochastic_metrics(log)
-    print("Baseline: ", baseline)
+    #baseline = metrics.get_non_stochastic_metrics(log)
+    #print("Baseline: ", baseline)
     baseline_stoch = metrics.get_stochastic_metrics(log)
     print("Baseline: ", baseline_stoch)
     clusters = get_clusters(log, n_clus, type)
@@ -40,5 +42,7 @@ def test_all_types(log, n_clus):
     full_results_stoch = metrics.get_stochastic_metrics(log)
     print("Full log: ", full_results_stoch)
 
+log = pm4py.read_xes('Helpdesk.xes')
+do_one_experiment(log, 3, type = 'entropic_clustering')
 
-do_one_experiment('RTFM.xes', 3, type = 'entropic_clustering')
+test_all_types(log, 3)

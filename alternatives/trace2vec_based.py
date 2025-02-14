@@ -10,7 +10,7 @@ from sklearn import preprocessing
 import gensim
 from gensim.models.doc2vec import TaggedDocument
 
-from ..entroclus import utils as utils
+from entroclus import utils as utils
 
 def sequences_from_dataframe(df):
     """

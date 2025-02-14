@@ -1,1 +1,17 @@
 RTFM.xes
+testscript.py
+alternatives/__pycache__/__init__.cpython-311.pyc
+entroclus/__pycache__/__init__.cpython-311.pyc
+entroclus/__pycache__/entropic_clustering_utils.cpython-311.pyc
+entroclus/__pycache__/entropic_clustering_variants.cpython-311.pyc
+entroclus/__pycache__/entropic_clustering.cpython-311.pyc
+entroclus/__pycache__/entropic_relevance.cpython-311.pyc
+entroclus/__pycache__/utils.cpython-311.pyc
+alternatives/__pycache__/frequency_based.cpython-311.pyc
+alternatives/__pycache__/random_clustering.cpython-311.pyc
+alternatives/__pycache__/trace2vec_based.cpython-311.pyc
+Helpdesk.xes
+evaluation/__pycache__/__init__.cpython-311.pyc
+evaluation/__pycache__/metrics.cpython-311.pyc
+evaluation/__pycache__/tade.cpython-311.pyc
+evaluation/__pycache__/tade_conformance.cpython-311.pyc

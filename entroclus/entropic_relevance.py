@@ -1,5 +1,5 @@
 import math
-from ..entroclus import utils as utils
+from entroclus import utils as utils
 
 def get_ER(variant_log, activity_counts, edge_counts):
     """

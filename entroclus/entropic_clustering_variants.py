@@ -1,6 +1,6 @@
-from ..entroclus import utils as utils
-from ..entroclus import entropic_relevance as entropic_relevance
-from ..entroclus import entropic_clustering_utils as entropic_clustering_utils
+from entroclus import utils as utils
+from entroclus import entropic_relevance as entropic_relevance
+from entroclus import entropic_clustering_utils as entropic_clustering_utils
 import copy
 
 def add_and_remove_variant(clusters, variant_log, variant, occurrence, cluster_index):

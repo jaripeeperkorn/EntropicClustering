@@ -1,8 +1,8 @@
 import pm4py
-from ..entroclus import utils as utils
-from ..entroclus import entropic_relevance as entropic_relevance
+from entroclus import utils as utils
+from entroclus import entropic_relevance as entropic_relevance
 
-from tade import TADE
+from evaluation.tade_conformance import TADE
 
 
 def get_non_stochastic_metrics(log, discovery = 'inductive'):
@@ -52,6 +52,5 @@ def get_stochastic_metrics(log):
     #tade does not require a model, only a log
     tade = TADE()
     tade.train(log)
-    fitness_scores_tade = [tade.fitness(trace) for trace in log]
-    tade_fitness = sum(fitness_scores_tade) / len(fitness_scores_tade)
+    tade_fitness = tade.fitness(log)
     return {'ER': ER, 'tade_fitness': tade_fitness}

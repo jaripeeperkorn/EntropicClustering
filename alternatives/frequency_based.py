@@ -3,7 +3,7 @@ from sklearn.cluster import KMeans
 from sklearn import preprocessing
 import numpy as np
 
-from ..entroclus import utils as utils
+from entroclus import utils as utils
 
 def get_alphabet(trace_list):
     """
