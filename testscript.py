@@ -1,9 +1,9 @@
-from .entroclus import entropic_clustering as entropic_clustering
-from .alternatives import frequency_based
-from .alternatives import random_clustering
-from .alternatives import trace2vec_based
+from entroclus import entropic_clustering as entropic_clustering
+from alternatives import frequency_based
+from alternatives import random_clustering
+from alternatives import trace2vec_based
 
-from .evaluation import metrics
+from evaluation import metrics
 
 def get_clusters(log, n_clus, type = 'entropic_clustering'):
     #for now just used ++ variant not random etc
@@ -21,6 +21,10 @@ def get_clusters(log, n_clus, type = 'entropic_clustering'):
     return clusters
 
 def do_one_experiment(log, n_clus, type = 'entropic_clustering'):
+    baseline = metrics.get_non_stochastic_metrics(log)
+    print("Baseline: ", baseline)
+    baseline_stoch = metrics.get_stochastic_metrics(log)
+    print("Baseline: ", baseline_stoch)
     clusters = get_clusters(log, n_clus, type)
     for i in range(0,n_clus):
         print("Cluster: ", metrics.get_non_stochastic_metrics(clusters[i]))
@@ -35,3 +39,6 @@ def test_all_types(log, n_clus):
     print("Full log: ", full_results)
     full_results_stoch = metrics.get_stochastic_metrics(log)
     print("Full log: ", full_results_stoch)
+
+
+do_one_experiment('RTFM.xes', 3, type = 'entropic_clustering')

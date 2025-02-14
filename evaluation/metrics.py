@@ -2,6 +2,9 @@ import pm4py
 from ..entroclus import utils as utils
 from ..entroclus import entropic_relevance as entropic_relevance
 
+from tade import TADE
+
+
 def get_non_stochastic_metrics(log, discovery = 'inductive'):
     '''
     Calculate non-stochastic metrics based on token-based replay and alignments for a given log or cluster.
@@ -45,4 +48,10 @@ def get_stochastic_metrics(log):
     #Getting ER for log and DFG wiht full behavior, no filter
     activity_counts, edge_counts = utils.get_dfg(variant_log)
     ER = entropic_relevance.get_ER(variant_log, activity_counts, edge_counts)
-    return {'ER': ER}
+
+    #tade does not require a model, only a log
+    tade = TADE()
+    tade.train(log)
+    fitness_scores_tade = [tade.fitness(trace) for trace in log]
+    tade_fitness = sum(fitness_scores_tade) / len(fitness_scores_tade)
+    return {'ER': ER, 'tade_fitness': tade_fitness}
