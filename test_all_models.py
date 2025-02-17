@@ -9,6 +9,10 @@ from alternatives import trace2vec_based
 
 from evaluation import metrics
 
+
+import os
+
+
 def test_all_methods(log_location, n_clusters):
     log = pm4py.read_xes(log_location)
     original_log = copy.deepcopy(log)
