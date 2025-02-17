@@ -39,6 +39,10 @@ def test_all_methods(log_location, n_clusters):
         total_traces = 0
         weighted_sums = {col: 0 for col in columns[3:]}  # Initialize dictionary to store weighted sums of metrics used for avergaging
 
+        # Create a directory to store cluster logs if it doesn't exist
+        save_dir = f"experimental_results_clusters/{log_location.replace('.xes','').replace('.gz','')}/{method}/{n_clusters}"
+        os.makedirs(save_dir, exist_ok=True)
+
         for cluster_index in range(0, n_clusters):
             cluster = clusters[cluster_index]
             num_traces = len(cluster)
@@ -50,6 +54,12 @@ def test_all_methods(log_location, n_clusters):
                                results_stochastic['ER'], results_stochastic['tade_fitness'], 
                                results_graph_simplicity['graph_density'], results_graph_simplicity['graph_entropy']]
             df.loc[df.shape[0]] = cluster_results
+
+            # Save the individual cluster log to file
+            cluster_log_location = f"{save_dir}/cluster_{cluster_index + 1}.xes"
+            print("Saving logs to directory:", cluster_log_location)
+            pm4py.write.write_xes(cluster, cluster_log_location)
+
             # Accumulate weighted sums for each metric
             total_traces += num_traces
             weighted_sums['replay_fitness'] += results_general['replay_fitness'] * num_traces
@@ -93,8 +103,8 @@ def get_clusters(log, n_clus, method = 'entropic_clustering'):
         raise ValueError(f"Unknown clustering method: {method}")
     return clusters
 
-#for i in range(2, 10):
-    #test_all_methods('Helpdesk.xes', i)
+for i in range(2, 10):
+    test_all_methods('Helpdesk.xes', i)
 
 for i in range(2, 10):
     test_all_methods('RTFM.xes', i)

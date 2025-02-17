@@ -9,7 +9,7 @@ def extract_cluster_count(filename):
     match = re.search(r'_(\d+)_results.csv', filename)
     return int(match.group(1)) if match else None
 
-def plot_metric_for_all_methods(csv_files, metric_name, output_dir='experimental_results_plots'):
+def plot_metric_for_all_methods(csv_files, metric_name, logname, output_dir='experimental_results_plots'):
     """
     Plots the weighted average of a specific metric across methods and number of clusters.
     The first point (cluster=1) is set to the baseline value from 'full_log'.
@@ -19,8 +19,9 @@ def plot_metric_for_all_methods(csv_files, metric_name, output_dir='experimental
         metric_name (str): The metric to plot (e.g., 'replay_fitness', 'align_precision').
         output_dir (str): Directory where the plots will be saved.
     """
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    output_dir_full = output_dir + "/" + logname
+    if not os.path.exists(output_dir_full):
+        os.makedirs(output_dir_full)
     
     method_data = {}  # Stores method-wise data
     baseline_values = {}  # Stores full_log values for each metric
@@ -68,11 +69,11 @@ def plot_metric_for_all_methods(csv_files, metric_name, output_dir='experimental
 
     plt.xlabel('Number of Clusters')
     plt.ylabel(metric_name)
-    plt.title(f'{metric_name} vs Number of Clusters')
+    plt.title(f'{logname}: {metric_name} for different cluster sizes')
     plt.legend(title='Clustering Methods', loc='best')
     plt.grid(True)
     
-    plot_filename = os.path.join(output_dir, f'{metric_name}_vs_clusters.pdf')
+    plot_filename = os.path.join(output_dir_full, f'{metric_name}_vs_clusters.pdf')
     plt.savefig(plot_filename, format='pdf', dpi=300)
     plt.close()
     print(f"Saved: {plot_filename}")
@@ -99,7 +100,9 @@ def generate_plots_from_results(logname, max_clusters, output_dir='experimental_
         return
 
     for metric in metrics:
-        plot_metric_for_all_methods(valid_csv_files, metric, output_dir)
+        plot_metric_for_all_methods(valid_csv_files, metric, logname, output_dir)
 
 # Example usage:
 generate_plots_from_results('Helpdesk', 10)
+generate_plots_from_results('RTFM', 10)
+
