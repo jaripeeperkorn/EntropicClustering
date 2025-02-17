@@ -14,7 +14,7 @@ import os
 
 
 def test_all_methods(log_location, n_clusters):
-    log = pm4py.read_xes(log_location)
+    log = pm4py.read_xes('datasets/'+log_location)
     original_log = copy.deepcopy(log)
     baseline = metrics.get_non_stochastic_metrics(log)
     baseline_stoch = metrics.get_stochastic_metrics(log)
@@ -103,14 +103,28 @@ def get_clusters(log, n_clus, method = 'entropic_clustering'):
         raise ValueError(f"Unknown clustering method: {method}")
     return clusters
 
-for i in range(2, 10):
-    test_all_methods('Helpdesk.xes', i)
-
-for i in range(2, 10):
-    test_all_methods('RTFM.xes', i)
+#for i in range(2, 10):
+#    test_all_methods('Helpdesk.xes', i)
 
 #for i in range(2, 10):
-#    test_all_methods('Sepsis.xes.gz', i)
+#    test_all_methods('RTFM.xes', i)
 
+for i in range(2, 10):
+    test_all_methods('BPIC13_incidents.xes', i)
 
+for i in range(2, 10):
+    test_all_methods('BPIC13_closedproblems.xes', i)
 
+"""
+for i in range(2, 10):
+    test_all_methods('BPIC12.xes', i)
+
+for i in range(2, 10):
+    test_all_methods('BPIC15.xes', i)
+
+for i in range(2, 10):
+    test_all_methods('Hospital_Billing.xes', i)
+
+for i in range(2, 10):
+    test_all_methods('Sepsis.xes', i)
+"""
