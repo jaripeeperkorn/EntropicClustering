@@ -17,6 +17,8 @@ def get_ER(variant_log, activity_counts, edge_counts):
     total_occurences = 0
     for variant, occurrence in variant_log.items():
         prob = utils.get_probability(activity_counts, edge_counts, variant)
+        #use this for the logs where probabilities get too small
+        prob = max(prob, 1e-10)
         ER_sum += (-math.log(prob, 2))*occurrence
         total_occurences += occurrence
     ER = ER_sum/total_occurences
@@ -48,6 +50,7 @@ def get_ER_normalized(variant_log, activity_counts, edge_counts):
         maximal_prob = utils.get_probability(act_counts_var, edge_count_var, variant)
         # Get normalized probability, subtracting the minimal ER at the end (obtained with maximal probability) would be the same
         prob_norm = prob/maximal_prob
+        
         ER_sum += (-math.log(prob_norm, 2))*occurrence
         total_occurences += occurrence
     ER = ER_sum/total_occurences

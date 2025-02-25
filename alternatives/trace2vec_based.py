@@ -12,6 +12,30 @@ from gensim.models.doc2vec import TaggedDocument
 
 from entroclus import utils as utils
 
+import pm4py.stats
+import pandas as pd
+
+def get_variant_log(log, order=True):
+    """
+    Get the variants of a given event log, together with the occurences,
+    with consistent whitespace removal.
+    """
+    variants_tuples = pm4py.stats.get_variants_as_tuples(log)
+    cleaned_variants = {}
+    for variant_tuple, count in variants_tuples.items():
+        # Remove space only if the model was trained without spaces
+        cleaned_variant = tuple(str(act).replace(" ", "") for act in variant_tuple)  # Adjust space handling as needed
+        cleaned_variants[cleaned_variant] = count
+    
+    if order:
+        return dict(sorted(cleaned_variants.items(), key=lambda x: x[1], reverse=True))
+    else:
+        return cleaned_variants
+
+
+def clean_sequence(seq):
+    return [x.replace(" ", "").strip() for x in seq]
+
 def sequences_from_dataframe(df):
     """
     Converts a dataframe into a list of sequences.
@@ -31,8 +55,8 @@ def sequences_from_dataframe(df):
     # Sort the dataframe by 'time:timestamp'
     #! for some reason ordering made it bug, probably because of formatting
     #! xes importer pm4py automatically puts cases together and orders on timestamp, but better to fix this in future to make sure
-    #df_sorted = df.sort_values(by='time:timestamp')
-    df_sorted = df
+    df_sorted = df.sort_values(by='time:timestamp')
+    #df_sorted = df
     # Group by 'case:concept:name' (case id's) to keep sequences together
     grouped = df_sorted.groupby('case:concept:name')
     # Initialize an empty list to store sequences
@@ -107,6 +131,7 @@ def get_tags(log):
         tags.append(ID)
     return(tags)
 
+
 def train_model(taggedlog, vector_size, window_size, min_count, dm, epochs):
     """
     Train a Doc2Vec model on a tagged log.
@@ -167,6 +192,7 @@ def cluster_t2v(input_variant_log, log, num_clus, cluster_version, distance, vec
     model = train_model(log_tagged, vector_size = vector_size, window_size=window_size, min_count=min_count, dm=dm, epochs=epochs)
     print("training done") 
     tags_variants = get_tags(keys)
+
     vector_log_variants = [model.dv[tag] for tag in tags_variants]
 
     #todo add other options?
@@ -180,7 +206,7 @@ def cluster_t2v(input_variant_log, log, num_clus, cluster_version, distance, vec
         clusters[labels[i]][key] = variant_log[key] 
     return clusters
 
-def cluster(log, num_clus, cluster_version='k-means++', distance='normalized', vector_size=None, window_size=2, min_count=0, dm=0, epochs=200, outputshape='log'):
+def cluster(log, num_clus, cluster_version='k-means++', distance='normalized', vector_size=None, window_size=2, min_count=1, dm=0, epochs=200, outputshape='log'):
     """
     Cluster the input log using the Trace2Vec approach.
 
@@ -203,7 +229,8 @@ def cluster(log, num_clus, cluster_version='k-means++', distance='normalized', v
     - If vector_size is not provided, it will be automatically calculated based on the size of the alphabet in the input log.
     - The default values for vector_size, window_size, min_count, dm, and epochs may not necessarily make sense for all use cases.
     """
-    variant_log_input = utils.get_variant_log(log)
+    #variant_log_input = utils.get_variant_log(log)
+    variant_log_input = get_variant_log(log)
     clusters_vl = cluster_t2v(variant_log_input, log, num_clus, cluster_version, distance, vector_size, window_size, min_count,dm,epochs)
     if outputshape == 'log':
         return [utils.filter_log_with_vl(log, cluster_vl) for cluster_vl in clusters_vl]
