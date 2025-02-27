@@ -35,7 +35,8 @@ def test_all_methods(log_location, n_clusters):
     df.loc[df.shape[0]] = baseline_results
     print(df)
 
-    methods = ['entropic_clustering', 'entropic_clustering_split', 'frequency_based', 'random_clustering', 'trace2vec_based']
+    #methods = ['entropic_clustering', 'entropic_clustering_split', 'frequency_based', 'random_clustering', 'trace2vec_based']
+    methods = ['entropic_clustering', 'entropic_clustering_split', 'frequency_based', 'random_clustering']
     
     for method in methods:
         log = copy.deepcopy(original_log)
@@ -109,7 +110,8 @@ def test_all_methods_no_alignments(log_location, n_clusters):
     df.loc[df.shape[0]] = baseline_results
     print(df)
 
-    methods = ['entropic_clustering', 'entropic_clustering_split', 'frequency_based', 'random_clustering', 'trace2vec_based']
+    #methods = ['entropic_clustering', 'entropic_clustering_split', 'frequency_based', 'random_clustering', 'trace2vec_based']
+    methods = ['entropic_clustering', 'entropic_clustering_split', 'frequency_based', 'random_clustering']
 
     
     for method in methods:
@@ -198,25 +200,16 @@ def get_clusters(log, n_clus, method = 'entropic_clustering'):
 #    test_all_methods('BPIC13_closedproblems.xes', i)
 
 #! from here onwards we did not include alignments as they are too computationally expensive
+#! also no trace2vec → there were some issues
 
-for i in range(2, 10):
-    test_all_methods('Hospital_Billing.xes', i)
+#for i in range(2, 10):
+#    test_all_methods_no_alignments('Hospital_Billing.xes', i)
 
-
-
-#!for these problems with trace2vec
-
-"""
-for i in range(2, 10):
-    test_all_methods_no_alignments('BPIC15.xes', i)
+#for i in range(2, 10):
+#    test_all_methods_no_alignments('BPIC15.xes', i)
 
 for i in range(2, 10):
     test_all_methods_no_alignments('BPIC12.xes', i)
 
 for i in range(2, 10):
     test_all_methods_no_alignments('Sepsis.xes', i)
-
-
-
-
-"""

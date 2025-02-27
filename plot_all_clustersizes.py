@@ -102,8 +102,35 @@ def generate_plots_from_results(logname, max_clusters, output_dir='experimental_
     for metric in metrics:
         plot_metric_for_all_methods(valid_csv_files, metric, logname, output_dir)
 
+def generate_plots_from_results_no_align(logname, max_clusters, output_dir='experimental_results_plots'):
+    """
+    Generates plots for each metric from pre-saved CSV results.
+
+    Args:
+        logname (str): Base name of the log file (e.g., 'Helpdesk', 'Sepsis').
+        max_clusters (int): Maximum number of clusters to evaluate.
+        output_dir (str): Directory where the plots will be saved.
+    """
+    metrics = [
+        'replay_fitness', 'replay_precision',  
+        'ER', 'tade_fitness', 'graph_density', 'graph_entropy'
+    ]
+
+    csv_files = [f'experimental_results/{logname}_{n_clusters}_results.csv' for n_clusters in range(2, max_clusters + 1)]
+    valid_csv_files = [file for file in csv_files if os.path.exists(file)]
+
+    if not valid_csv_files:
+        print(f"No valid CSV files found for {logname}.")
+        return
+
+    for metric in metrics:
+        plot_metric_for_all_methods(valid_csv_files, metric, logname, output_dir)
+
+
 # Example usage:
 #generate_plots_from_results('Helpdesk', 10)
 #generate_plots_from_results('RTFM', 10)
 #generate_plots_from_results('BPIC13_incidents', 10)
 #generate_plots_from_results('BPIC13_closedproblems', 10)
+generate_plots_from_results_no_align('BPIC15', 10)
+generate_plots_from_results_no_align('Hospital_Billing', 10)
