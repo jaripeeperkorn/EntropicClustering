@@ -19,7 +19,7 @@ evaluation/__pycache__/graph_simplicity_metrics.cpython-311.pyc
 Sepsis.xes.gz
 BPIC15.xes
 HospitalBilling.xes.gz
-experimental_results_clusters/
 BPIC19.xes
 datasets/
 experimental_results_one_clusters/clusters
+experimental_results_elbow/clusters

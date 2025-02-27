@@ -9,7 +9,7 @@ def extract_cluster_count(filename):
     match = re.search(r'_(\d+)_results.csv', filename)
     return int(match.group(1)) if match else None
 
-def plot_metric_for_all_methods(csv_files, metric_name, logname, output_dir='experimental_results_plots'):
+def plot_metric_for_all_methods(csv_files, metric_name, logname, output_dir='experimental_results_elbow/plots'):
     """
     Plots the weighted average of a specific metric across methods and number of clusters.
     The first point (cluster=1) is set to the baseline value from 'full_log'.
@@ -78,7 +78,7 @@ def plot_metric_for_all_methods(csv_files, metric_name, logname, output_dir='exp
     plt.close()
     print(f"Saved: {plot_filename}")
 
-def generate_plots_from_results(logname, max_clusters, output_dir='experimental_results_plots'):
+def generate_plots_from_results(logname, max_clusters, output_dir='experimental_results_elbow/plots'):
     """
     Generates plots for each metric from pre-saved CSV results.
 
@@ -92,7 +92,7 @@ def generate_plots_from_results(logname, max_clusters, output_dir='experimental_
         'ER', 'tade_fitness', 'graph_density', 'graph_entropy'
     ]
 
-    csv_files = [f'experimental_results/{logname}_{n_clusters}_results.csv' for n_clusters in range(2, max_clusters + 1)]
+    csv_files = [f'experimental_results_elbow/results/{logname}_{n_clusters}_results.csv' for n_clusters in range(2, max_clusters + 1)]
     valid_csv_files = [file for file in csv_files if os.path.exists(file)]
 
     if not valid_csv_files:
@@ -102,7 +102,7 @@ def generate_plots_from_results(logname, max_clusters, output_dir='experimental_
     for metric in metrics:
         plot_metric_for_all_methods(valid_csv_files, metric, logname, output_dir)
 
-def generate_plots_from_results_no_align(logname, max_clusters, output_dir='experimental_results_plots'):
+def generate_plots_from_results_no_align(logname, max_clusters, output_dir='experimental_results_elbow/plots'):
     """
     Generates plots for each metric from pre-saved CSV results.
 
@@ -116,7 +116,7 @@ def generate_plots_from_results_no_align(logname, max_clusters, output_dir='expe
         'ER', 'tade_fitness', 'graph_density', 'graph_entropy'
     ]
 
-    csv_files = [f'experimental_results/{logname}_{n_clusters}_results.csv' for n_clusters in range(2, max_clusters + 1)]
+    csv_files = [f'experimental_results_elbow/results/{logname}_{n_clusters}_results.csv' for n_clusters in range(2, max_clusters + 1)]
     valid_csv_files = [file for file in csv_files if os.path.exists(file)]
 
     if not valid_csv_files:
@@ -132,5 +132,7 @@ def generate_plots_from_results_no_align(logname, max_clusters, output_dir='expe
 #generate_plots_from_results('RTFM', 10)
 #generate_plots_from_results('BPIC13_incidents', 10)
 #generate_plots_from_results('BPIC13_closedproblems', 10)
-generate_plots_from_results_no_align('BPIC15', 10)
-generate_plots_from_results_no_align('Hospital_Billing', 10)
+#generate_plots_from_results_no_align('BPIC15', 10)
+#generate_plots_from_results_no_align('Hospital_Billing', 10)
+generate_plots_from_results_no_align('BPIC12', 10)
+generate_plots_from_results_no_align('Sepsis', 10)

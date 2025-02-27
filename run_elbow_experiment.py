@@ -41,7 +41,7 @@ def test_all_methods(log_location, n_clusters):
         weighted_sums = {col: 0 for col in columns[3:]}  # Initialize dictionary to store weighted sums of metrics used for avergaging
 
         # Create a directory to store cluster logs if it doesn't exist
-        save_dir = f"experimental_results_clusters/{log_location.replace('.xes','').replace('.gz','')}/{method}/{n_clusters}"
+        save_dir = f"experimental_results_elbow/clusters/{log_location.replace('.xes','').replace('.gz','')}/{method}/{n_clusters}"
         os.makedirs(save_dir, exist_ok=True)
 
         for cluster_index in range(0, n_clusters):
@@ -82,7 +82,7 @@ def test_all_methods(log_location, n_clusters):
         df.loc[df.shape[0]] = weighted_average
 
     logname = log_location.replace('.xes','').replace('.gz','')
-    results_loc = f'experimental_results/{logname}_{str(n_clusters)}_results.csv'
+    results_loc = f'experimental_results_elbow/results/{logname}_{str(n_clusters)}_results.csv'
     df.to_csv(results_loc, index=False)
 
 
@@ -117,7 +117,7 @@ def test_all_methods_no_alignments(log_location, n_clusters):
         weighted_sums = {col: 0 for col in columns[3:]}  # Initialize dictionary to store weighted sums of metrics used for avergaging
 
         # Create a directory to store cluster logs if it doesn't exist
-        save_dir = f"experimental_results_clusters/{log_location.replace('.xes','').replace('.gz','')}/{method}/{n_clusters}"
+        save_dir = f"experimental_results_elbow/clusters/{log_location.replace('.xes','').replace('.gz','')}/{method}/{n_clusters}"
         os.makedirs(save_dir, exist_ok=True)
 
         for cluster_index in range(0, n_clusters):
@@ -156,7 +156,7 @@ def test_all_methods_no_alignments(log_location, n_clusters):
         df.loc[df.shape[0]] = weighted_average
 
     logname = log_location.replace('.xes','').replace('.gz','')
-    results_loc = f'experimental_results/{logname}_{str(n_clusters)}_results.csv'
+    results_loc = f'experimental_results_elbow/results/{logname}_{str(n_clusters)}_results.csv'
     df.to_csv(results_loc, index=False)
     
 
@@ -203,8 +203,8 @@ def get_clusters(log, n_clus, method = 'entropic_clustering'):
 #for i in range(2, 10):
 #    test_all_methods_no_alignments('BPIC15.xes', i)
 
-for i in range(2, 10):
-    test_all_methods_no_alignments('BPIC12.xes', i)
+#for i in range(2, 10):
+#    test_all_methods_no_alignments('BPIC12.xes', i)
 
-for i in range(2, 10):
-    test_all_methods_no_alignments('Sepsis.xes', i)
+#for i in range(2, 10):
+#    test_all_methods_no_alignments('Sepsis.xes', i)
