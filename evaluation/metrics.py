@@ -8,7 +8,7 @@ from evaluation import graph_simplicity_metrics as gsm
 
 
 
-def get_non_stochastic_metrics_extented(log, discovery = 'inductive'):
+def get_non_stochastic_metrics(log, discovery = 'inductive'):
     '''
     Calculate non-stochastic metrics based on token-based replay and alignments for a given log or cluster.
 
@@ -38,34 +38,6 @@ def get_non_stochastic_metrics_extented(log, discovery = 'inductive'):
     precision_alignments = pm4py.precision_alignments(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
     return {'replay_fitness': fitness_tbr, 'replay_precision': precision_tbr, 'align_fitness': fitness_alignments, 'align_precision': precision_alignments, 'simplicity': simplicity}
 
-
-def get_non_stochastic_metrics(log, discovery = 'inductive'):
-    '''
-    Calculate non-stochastic metrics based on token-based replay and alignments for a given log or cluster.
-
-    Parameters:
-    - log: Event log or cluster for analysis
-    - discovery:  The name of the discovery algorithm used (default inductive miner)
-
-    Returns:
-    - Dictionary containing replay fitness, replay precision, alignment fitness, and alignment precision
-    '''
-    #discovery of a petri net with inductive miner
-    
-    if discovery == 'inductive':
-        #! to do CHECK NOISE THRESHOLD VALUE
-        net, im, fm = pm4py.discover_petri_net_inductive(log, noise_threshold = 0.2, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
-    if discovery == 'alpha':
-        net, im, fm = pm4py.discover_petri_net_alpha(log, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
-    if discovery == 'ilp':
-        net, im, fm = pm4py.discover_petri_net_ilp(log, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
-    fitness_tbr = pm4py.fitness_token_based_replay(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')['log_fitness']
-    precision_tbr = pm4py.precision_token_based_replay(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
-
-    #! re evaluate if we want to calculate these
-    fitness_alignments = pm4py.fitness_alignments(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')['log_fitness']
-    precision_alignments = pm4py.precision_alignments(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
-    return {'replay_fitness': fitness_tbr, 'replay_precision': precision_tbr, 'align_fitness': fitness_alignments, 'align_precision': precision_alignments}
 
 def get_stochastic_metrics(log):
     """
@@ -111,7 +83,14 @@ def get_graph_simplicity_metrics(log):
 
 def get_non_stochastic_metrics_no_alignments(log, discovery = 'inductive'):
     '''
-    Calculate non-stochastic metrics based on token-based replay (but not alignments) for a given log or cluster.
+    Calculate non-stochastic metrics based on token-based replay and alignments for a given log or cluster.
+
+    Parameters:
+    - log: Event log or cluster for analysis
+    - discovery:  The name of the discovery algorithm used (default inductive miner)
+
+    Returns:
+    - Dictionary containing replay fitness, replay precision, alignment fitness, and alignment precision
     '''
     #discovery of a petri net with inductive miner
     
@@ -122,9 +101,20 @@ def get_non_stochastic_metrics_no_alignments(log, discovery = 'inductive'):
         net, im, fm = pm4py.discover_petri_net_alpha(log, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
     if discovery == 'ilp':
         net, im, fm = pm4py.discover_petri_net_ilp(log, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
+
+    simplicity = pm4py.algo.evaluation.simplicity.algorithm.apply(net)
+    
     fitness_tbr = pm4py.fitness_token_based_replay(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')['log_fitness']
     precision_tbr = pm4py.precision_token_based_replay(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
-    return {'replay_fitness': fitness_tbr, 'replay_precision': precision_tbr}
-    
+
+    #fitness_alignments = pm4py.fitness_alignments(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')['log_fitness']
+    #precision_alignments = pm4py.precision_alignments(log, net, im, fm, activity_key='concept:name', case_id_key='case:concept:name', timestamp_key='time:timestamp')
+
+    # We store the value as -999.0 to indicate that it was not calculated - but have a value so we can still rank and need to adapt less of the code
+    fitness_alignments = -999.0
+    precision_alignments = -999.0
+
+    return {'replay_fitness': fitness_tbr, 'replay_precision': precision_tbr, 'align_fitness': fitness_alignments, 'align_precision': precision_alignments, 'simplicity': simplicity}
+
     
 

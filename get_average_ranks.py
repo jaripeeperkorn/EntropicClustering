@@ -7,8 +7,8 @@ clustering_methods = ['No clustering', 'trace2vec_based', 'entropic_clustering_+
                       'entropic_clustering_randominit', 'entropic_clustering_split_++', 'entropic_clustering_split_++_norm',
                       'entropic_clustering_split_randominit', 'frequency_based', 'random_clustering', 'actitrac_freq', 'actitrac_dist']
 metrics = ['replay_fitness', 'replay_precision', 'align_fitness', 'align_precision', 'simplicity', 'ER', 'graph_density', 'graph_entropy']
-maximize_metrics = ['replay_fitness', 'replay_precision', 'align_fitness', 'align_precision', 'simplicity']
-minimize_metrics = ['ER', 'graph_density', 'graph_entropy']
+maximize_metrics = ['replay_fitness', 'replay_precision', 'align_fitness', 'align_precision', 'simplicity', 'graph_density']
+minimize_metrics = ['ER', 'graph_entropy']
 
 # Path to results directory
 results_dir = "experimental_results_one_cluster_size/results"

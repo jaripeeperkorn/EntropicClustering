@@ -17,7 +17,8 @@ def graph_density(activity_counts, edge_counts):
 
 def graph_entropy(activity_counts, edge_counts):
     """
-    Computes the entropy of the graph based on transition probabilities.
+    Computes the Structural Graph Entropy of the graph based on transition probabilities.
+    More speciically we calculate Markov-based entropy or Shannon entropy for random walks on a graph.
     """
     outgoing_counts = defaultdict(int)
     for (src, _), count in edge_counts.items():

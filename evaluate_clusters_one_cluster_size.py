@@ -8,7 +8,7 @@ import os
 
 
 
-def evaluate_all_methods(logname, n_clusters):
+def evaluate_all_methods(logname, n_clusters, align=True):
     """
     methods = ['trace2vec_based',
                'entropic_clustering_++', 'entropic_clustering_++_norm', 'entropic_clustering_randominit', 
@@ -45,7 +45,10 @@ def evaluate_all_methods(logname, n_clusters):
     if not (df['method'] == 'full_log').any():
         print("Baseline results do not exist, calculating.")
         log = pm4py.read_xes('datasets/'+logname)
-        baseline_PN = metrics.get_non_stochastic_metrics_extented(log)
+        if align==True:
+            baseline_PN = metrics.get_non_stochastic_metrics(log)
+        else:
+            baseline_PN = metrics.get_non_stochastic_metrics_no_alignments(log)
         baseline_stoch = metrics.get_stochastic_metrics(log)
         baseline_graph_simplicity = metrics.get_graph_simplicity_metrics(log)
 
@@ -75,7 +78,10 @@ def evaluate_all_methods(logname, n_clusters):
             curr_cluster_loc = f"experimental_results_one_cluster_size/clusters/{logname.replace('.xes','').replace('.gz','')}/{method}/cluster_{str(clus+1)}.xes"
             curr_cluster = pm4py.read_xes(curr_cluster_loc)
             num_traces = len(curr_cluster)
-            curr_PN = metrics.get_non_stochastic_metrics_extented(curr_cluster)
+            if align==True:
+                curr_PN = metrics.get_non_stochastic_metrics(curr_cluster)
+            else:
+                curr_PN = metrics.get_non_stochastic_metrics_no_alignments(curr_cluster)
             curr_stoch = metrics.get_stochastic_metrics(curr_cluster)
             curr_graph_simplicity = metrics.get_graph_simplicity_metrics(curr_cluster)
             curr_results = [method, clus+1, len(curr_cluster), 
@@ -99,7 +105,7 @@ def evaluate_all_methods(logname, n_clusters):
         df.to_csv(results_loc, index=False)  # Save after averages
         print(df)
 
-    df.to_csv(results_loc, index=False)
+    #df.to_csv(results_loc, index=False)
 
     # Generate LaTeX Table for the results
     generate_latex_table(df, logname)
@@ -175,7 +181,7 @@ def add_actitrac_methods(logname, n_clusters):
             curr_cluster_loc = f"experimental_results_one_cluster_size/clusters/{logname.replace('.xes','').replace('.gz','')}/{method}/cluster_{str(clus+1)}.xes"
             curr_cluster = pm4py.read_xes(curr_cluster_loc)
             num_traces = len(curr_cluster)
-            curr_PN = metrics.get_non_stochastic_metrics_extented(curr_cluster)
+            curr_PN = metrics.get_non_stochastic_metrics(curr_cluster)
             curr_stoch = metrics.get_stochastic_metrics(curr_cluster)
             curr_graph_simplicity = metrics.get_graph_simplicity_metrics(curr_cluster)
             curr_results = [method, clus+1, len(curr_cluster), 
@@ -198,7 +204,7 @@ def add_actitrac_methods(logname, n_clusters):
         df.loc[df.shape[0]] = averages
         df.to_csv(results_loc, index=False)  # Save after averages
         print(df)
-    df.to_csv(results_loc, index=False)
+    #df.to_csv(results_loc, index=False)
 
     # Generate LaTeX Table for the results
     generate_latex_table(df, logname)
@@ -214,9 +220,16 @@ elbow_points = {'Helpdesk': 4,
                 'BPIC12': 4,
                 'Sepsis': 6}       
 
-#to_run = ['Helpdesk', 'RTFM', 'BPIC13_incidents', 'BPIC13_closedproblems', 'BPIC15', 'Hospital_Billing', 'BPIC12', 'Sepsis']
-to_run = ['Sepsis', 'Hospital_Billing', 'BPIC15', 'BPIC12']
+#to_run = ['Helpdesk', 'RTFM', 'BPIC13_incidents', 'BPIC13_closedproblems', 'Hospital_Billing', 'Sepsis']
+#for logname in to_run:
+#    evaluate_all_methods(logname+'.xes', elbow_points[logname])
 
+#to_run = ['BPIC15', 'BPIC12']
+#for logname in to_run:
+#    evaluate_all_methods(logname+'.xes', elbow_points[logname], align=False)
+
+
+to_run = ['Helpdesk', 'RTFM', 'BPIC13_incidents', 'BPIC13_closedproblems', 'Hospital_Billing', 'Sepsis', 'BPIC15', 'BPIC12']
 
 for logname in to_run:
-    evaluate_all_methods(logname+'.xes', elbow_points[logname])
+    add_actitrac_methods(logname+'.xes', elbow_points[logname])
