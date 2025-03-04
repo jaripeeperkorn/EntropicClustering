@@ -15,6 +15,10 @@ from entroclus import utils as utils
 import pm4py.stats
 import pandas as pd
 
+import hashlib
+import pickle
+
+
 def get_variant_log(log, order=True):
     """
     Get the variants of a given event log, together with the occurences,
@@ -55,8 +59,8 @@ def sequences_from_dataframe(df):
     # Sort the dataframe by 'time:timestamp'
     #! for some reason ordering made it bug, probably because of formatting
     #! xes importer pm4py automatically puts cases together and orders on timestamp, but better to fix this in future to make sure
-    df_sorted = df.sort_values(by='time:timestamp')
-    #df_sorted = df
+    #df_sorted = df.sort_values(by='time:timestamp')
+    df_sorted = df
     # Group by 'case:concept:name' (case id's) to keep sequences together
     grouped = df_sorted.groupby('case:concept:name')
     # Initialize an empty list to store sequences
@@ -192,6 +196,9 @@ def cluster_t2v(input_variant_log, log, num_clus, cluster_version, distance, vec
     model = train_model(log_tagged, vector_size = vector_size, window_size=window_size, min_count=min_count, dm=dm, epochs=epochs)
     print("training done") 
     tags_variants = get_tags(keys)
+
+    print("Generated tags in get_tags():", get_tags(keys)[:10])
+    print("Tags in Doc2Vec model:", model.dv.index_to_key[:10])  # Prints stored keys
 
     vector_log_variants = [model.dv[tag] for tag in tags_variants]
 

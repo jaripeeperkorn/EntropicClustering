@@ -16,7 +16,7 @@ import copy
 from entroclus import entropic_clustering as entropic_clustering
 from alternatives import frequency_based
 from alternatives import random_clustering
-from alternatives import trace2vec_based
+from alternatives import trace2vec_fixed
 
 def get_clusters(log, n_clus, method = 'entropic_clustering'):
     #for now just used ++ variant not random etc
@@ -37,8 +37,7 @@ def get_clusters(log, n_clus, method = 'entropic_clustering'):
     elif method == 'random_clustering':
         clusters = random_clustering.cluster(log, n_clus, variant='random', outputshape='log')
     elif method == 'trace2vec_based':
-        clusters = trace2vec_based.cluster(log, n_clus, cluster_version='k-means++', distance='normalized', 
-                                          vector_size=None, window_size=2, min_count=1, dm=0, epochs=200, outputshape='log')
+        clusters = trace2vec_fixed.cluster(log, n_clus, cluster_version='k-means++', distance='normalized', vector_size=None, window_size=2, min_count=1, dm=0, epochs=200, outputshape='log')
     else:
         raise ValueError(f"Unknown clustering method: {method}")
     return clusters
@@ -66,3 +65,21 @@ def get_clusters_all_methods(log_location, n_clusters):
             print("Saving logs to directory:", cluster_log_location)
             pm4py.write.write_xes(cluster, cluster_log_location)
     
+
+#when ER doesn't go down we use graph entropy for both BPIC13 and BPIC12
+
+elbow_points = {'Helpdesk': 4,
+                'RTFM': 4,
+                'BPIC13_incidents': 5,
+                'BPIC13_closedproblems': 5,
+                'BPIC15': 4,
+                'Hospital_Billing': 5,
+                'BPIC12': 4,
+                'Sepsis': 6}           
+
+#to_run = ['Helpdesk']
+to_run = ['Helpdesk', 'RTFM', 'BPIC13_incidents', 'BPIC13_closedproblems', 'BPIC15', 'Hospital_Billing', 'BPIC12', 'Sepsis']
+
+
+for log in to_run:
+    get_clusters_all_methods(log+'.xes', elbow_points[log])

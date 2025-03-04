@@ -21,5 +21,7 @@ BPIC15.xes
 HospitalBilling.xes.gz
 BPIC19.xes
 datasets/
-experimental_results_one_clusters/clusters
+experimental_results_one_cluster_size/clusters
 experimental_results_elbow/clusters
+alternatives/__pycache__/trace2vec_fixed.cpython-311.pyc
+experimental_results_one_cluster_size/results/*.tex
