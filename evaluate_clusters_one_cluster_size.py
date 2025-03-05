@@ -150,7 +150,7 @@ Method & Replay Fitness & Replay Precision & Align Fitness & Align Precision & S
 
 
 #This function was purely added because of the prder we ran the experiments
-def add_actitrac_methods(logname, n_clusters):
+def add_actitrac_methods(logname, n_clusters, align=True):
     actitrac_methods = ['actitrac_freq', 'actitrac_dist']
 
     results_loc = f"experimental_results_one_cluster_size/results/{logname.replace('.xes', '').replace('.gz', '')}_results.csv"
@@ -181,7 +181,10 @@ def add_actitrac_methods(logname, n_clusters):
             curr_cluster_loc = f"experimental_results_one_cluster_size/clusters/{logname.replace('.xes','').replace('.gz','')}/{method}/cluster_{str(clus+1)}.xes"
             curr_cluster = pm4py.read_xes(curr_cluster_loc)
             num_traces = len(curr_cluster)
-            curr_PN = metrics.get_non_stochastic_metrics(curr_cluster)
+            if align==True:
+                curr_PN = metrics.get_non_stochastic_metrics(curr_cluster)
+            else:
+                curr_PN = metrics.get_non_stochastic_metrics_no_alignments(curr_cluster)
             curr_stoch = metrics.get_stochastic_metrics(curr_cluster)
             curr_graph_simplicity = metrics.get_graph_simplicity_metrics(curr_cluster)
             curr_results = [method, clus+1, len(curr_cluster), 
@@ -209,6 +212,8 @@ def add_actitrac_methods(logname, n_clusters):
     # Generate LaTeX Table for the results
     generate_latex_table(df, logname)
 
+
+
 #when ER doesn't go down we use graph entropy for both BPIC13 and BPIC12
 
 elbow_points = {'Helpdesk': 4,
@@ -229,7 +234,12 @@ elbow_points = {'Helpdesk': 4,
 #    evaluate_all_methods(logname+'.xes', elbow_points[logname], align=False)
 
 
-to_run = ['Helpdesk', 'RTFM', 'BPIC13_incidents', 'BPIC13_closedproblems', 'Hospital_Billing', 'Sepsis', 'BPIC15', 'BPIC12']
+to_run = ['Helpdesk', 'RTFM', 'BPIC13_incidents', 'BPIC13_closedproblems', 'Hospital_Billing', 'Sepsis']
 
 for logname in to_run:
     add_actitrac_methods(logname+'.xes', elbow_points[logname])
+
+#to_run = ['BPIC15', 'BPIC12']
+
+#for logname in to_run: 
+#    add_actitrac_methods(logname+'.xes', elbow_points[logname], align=False)
