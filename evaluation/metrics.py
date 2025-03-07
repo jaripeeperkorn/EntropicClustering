@@ -55,11 +55,7 @@ def get_stochastic_metrics(log):
     activity_counts, edge_counts = utils.get_dfg(variant_log)
     ER = entropic_relevance.get_ER(variant_log, activity_counts, edge_counts)
 
-    #tade does not require a model, only a log
-    tade = TADE()
-    tade.train(log)
-    tade_fitness = tade.fitness(log)
-    return {'ER': ER, 'tade_fitness': tade_fitness}
+    return {'ER': ER}
 
 
 def get_graph_simplicity_metrics(log):

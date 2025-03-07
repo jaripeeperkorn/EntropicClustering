@@ -1,11 +1,4 @@
 
-#! manually add actitrac!
-
-
-#!To Do: ADD SIMPLICTY
-#!TO Do: ADD SPLIT GETTING CLUSTERS AND GETTING RESULTS
-
-#! restructure folders
 
 import os
 

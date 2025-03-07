@@ -25,3 +25,5 @@ experimental_results_one_cluster_size/clusters
 experimental_results_elbow/clusters
 alternatives/__pycache__/trace2vec_fixed.cpython-311.pyc
 experimental_results_one_cluster_size/results/*.tex
+stats_test.py
+format_tables.py
