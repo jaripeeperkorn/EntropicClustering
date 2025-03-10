@@ -27,3 +27,5 @@ alternatives/__pycache__/trace2vec_fixed.cpython-311.pyc
 experimental_results_one_cluster_size/results/*.tex
 stats_test.py
 format_tables.py
+entroclus/__pycache__/__init__.cpython-39.pyc
+entroclus/__pycache__/utils.cpython-39.pyc
