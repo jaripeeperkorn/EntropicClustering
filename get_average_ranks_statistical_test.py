@@ -9,6 +9,8 @@ from Orange.evaluation import compute_CD, graph_ranks
 #Needs Orange3 older version (like 3.30)
 
 #just used for plotting
+
+
 logs_replacement = {
     'full_log': r"$\mathtt{full\ log}$",
     'trace2vec_based': r"$\mathtt{trace2vec_{km++}}$",
@@ -30,9 +32,12 @@ logs_replacement = {
 datasets_all = ['Helpdesk', 'RTFM', 'BPIC13_incidents', 'BPIC13_closedproblems', 'Hospital_Billing', 'Sepsis', 'BPIC12', 'BPIC15']
 datasets_no_align = ['Helpdesk', 'RTFM', 'BPIC13_incidents', 'BPIC13_closedproblems', 'Hospital_Billing', 'Sepsis']
 
+
 clustering_methods = ['full_log', 'trace2vec_based', 'entropic_clustering_++', 'entropic_clustering_++_norm',
                       'entropic_clustering_randominit', 'entropic_clustering_split_++', 'entropic_clustering_split_++_norm',
                       'entropic_clustering_split_randominit', 'frequency_based', 'random_clustering', 'actitrac_freq', 'actitrac_dist']
+
+
 
 metrics = ['replay_fitness', 'replay_precision', 'align_fitness', 'align_precision', 'simplicity', 'ER', 'graph_density', 'graph_entropy']
 maximize_metrics = ['replay_fitness', 'replay_precision', 'align_fitness', 'align_precision', 'simplicity']
@@ -121,14 +126,14 @@ print(final_ranking_df)
 
 # Save results as a LaTeX table
 latex_table = final_ranking_df.to_latex(float_format=lambda x: f"{x:.2f}", escape=False)
-with open(os.path.join(results_dir, "average_ranking_table.tex"), "w") as f:
+with open(os.path.join(results_dir, "average_ranking_table_EXTRA.tex"), "w") as f:
     f.write(latex_table)
 
-print("LaTeX table saved as average_ranking_table.tex")
+print("LaTeX table saved as average_ranking_table_EXTRA.tex")
 
 # Save Nemenyi test results if available
 for metric, pvals in nemenyi_results.items():
-    pvals.to_csv(os.path.join(results_dir, f"nemenyi_{metric}.csv"))
+    pvals.to_csv(os.path.join(results_dir, f"nemenyi_{metric}_EXTRA.csv"))
     print(f"Nemenyi post-hoc test results saved for {metric}.")
 
 # Generate CD plots
@@ -155,6 +160,6 @@ for metric, rankings in average_rankings.items():
 
             plt.title(f"Critical Difference Plot for {metric}", fontsize=14)
             plt.subplots_adjust(left=0.25, right=0.75, top=0.85, bottom=0.15)
-            plt.savefig(os.path.join(results_dir, f"cd_plot_{metric}.png"))
+            plt.savefig(os.path.join(results_dir, f"cd_plot_{metric}_EXTRA.png"))
             plt.close()
 
