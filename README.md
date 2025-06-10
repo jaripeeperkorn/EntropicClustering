@@ -14,3 +14,8 @@ The folder entroclus contains the code for the cluserting algorithm.
 Alternatives contains all the alternative clustering algorithms used in the experiments (with the exception of ActiTraC).
 
 ```tutorials to be added```
+
+## Reoproducing the experiment
+
+The requirements can be found in
+> 
