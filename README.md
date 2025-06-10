@@ -1,10 +1,9 @@
-# Active Stochastic Trace Clustering
+# Model-driven Stochastic Trace Clustering
 
 ## Description
 
 This is the github repository containing the code, experiments and experimental results used in the paper:
-> Active Stochastic Trace Clustering
-> (To be presented at BPM 2025)
+> Model-driven Stochastic Trace Clustering
 > Jari Peeperkorn, Johannes De Smedt & Jochen De Weerdt
 
 ## Using the code
