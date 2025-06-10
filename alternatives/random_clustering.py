@@ -1,6 +1,7 @@
 from entroclus import utils as utils
 
-import copy, random
+import copy
+import random
 
 def get_random_clusters_equisized(variant_log_input, num_clus): 
     """

@@ -1,6 +1,5 @@
 import pandas as pd
 
-import numpy as np
 import math
 
 import copy
@@ -13,10 +12,7 @@ from gensim.models.doc2vec import TaggedDocument
 from entroclus import utils as utils
 
 import pm4py.stats
-import pandas as pd
 
-import hashlib
-import pickle
 
 
 def get_variant_log(log, order=True):

@@ -3,7 +3,6 @@ from entroclus import entropic_relevance as entropic_relevance
 
 import random
 import copy
-import numpy as np
 
 
 def pairwise_ER(trace1, trace2, norm=False):

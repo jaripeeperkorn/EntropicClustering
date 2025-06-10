@@ -18,8 +18,6 @@ def get_alphabet(trace_list):
     activities = set([act for trace in trace_list for act in trace])
     return list(activities)
 
-    return random_clusters
-
 def apply_integer_map(log, map):
     """
     Apply an integer map to a log.

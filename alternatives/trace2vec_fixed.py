@@ -1,5 +1,3 @@
-import pandas as pd
-import numpy as np
 import math
 import copy
 from sklearn.cluster import KMeans
@@ -8,7 +6,6 @@ import gensim
 from gensim.models.doc2vec import TaggedDocument
 import pm4py.stats
 import hashlib
-import pickle
 from entroclus import utils as utils
 
 
