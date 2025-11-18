@@ -50,13 +50,30 @@ def get_stochastic_metrics(log):
     - dict: A dictionary containing the ER metric value.
     """
     variant_log = utils.get_variant_log(log)
-    #! for now it does not really make sense to split this into entropic precision and fitness (as the automata coming from log and model is the same)
     #Getting ER for log and DFG wiht full behavior, no filter
     activity_counts, edge_counts = utils.get_dfg(variant_log)
     ER = entropic_relevance.get_ER(variant_log, activity_counts, edge_counts)
 
-    return {'ER': ER}
+    ER_sum = entropic_relevance.get_ER_sum(variant_log, activity_counts, edge_counts)
 
+    return {'ER': ER, 'ER_sum': ER_sum}
+
+def get_only_ER_sum(log):
+    """
+    Calculate the Entropic Relevance sum (ER) metric for a given log or cluster. Needed this for legacy reasons.
+
+    Parameters:
+    - log (pm4py.objects.log.obj.EventLog): The event log or cluster for which to calculate the ER metric.
+
+    Returns:
+    - float: The ER sum metric value.
+    """
+    variant_log = utils.get_variant_log(log)
+    #Getting ER for log and DFG wiht full behavior, no filter
+    activity_counts, edge_counts = utils.get_dfg(variant_log)
+    ER_sum = entropic_relevance.get_ER_sum(variant_log, activity_counts, edge_counts)
+
+    return ER_sum
 
 def get_graph_simplicity_metrics(log):
     """

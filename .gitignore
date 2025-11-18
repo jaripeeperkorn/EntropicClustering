@@ -29,3 +29,5 @@ experiment/stats_test.py
 experiment/format_tables.py
 entroclus/__pycache__/__init__.cpython-39.pyc
 entroclus/__pycache__/utils.cpython-39.pyc
+add_ER_sum.py
+check_limit.py

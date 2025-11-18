@@ -21,7 +21,8 @@ def evaluate_all_methods(logname, n_clusters, align=True):
                 'replay_fitness', 'replay_precision', 
                 'align_fitness', 'align_precision',
                 'simplicity', 
-                'ER', 
+                'ER',
+                'ER_sum',
                 'graph_density', 'graph_entropy']
     
     results_loc = f"experimental_results_one_cluster_size/results/{logname.replace('.xes', '').replace('.gz', '')}_results.csv"
@@ -49,7 +50,8 @@ def evaluate_all_methods(logname, n_clusters, align=True):
                             baseline_PN['replay_fitness'], baseline_PN['replay_precision'], 
                             baseline_PN['align_fitness'], baseline_PN['align_precision'],
                             baseline_PN['simplicity'], 
-                            baseline_stoch['ER'], 
+                            baseline_stoch['ER'],
+                            baseline_stoch['ER_sum'], 
                             baseline_graph_simplicity['graph_density'], baseline_graph_simplicity['graph_entropy']]
         df.loc[df.shape[0]] = baseline_results
         df.to_csv(results_loc, index=False)  # Save after baseline
@@ -81,19 +83,26 @@ def evaluate_all_methods(logname, n_clusters, align=True):
                             curr_PN['replay_fitness'], curr_PN['replay_precision'], 
                             curr_PN['align_fitness'], curr_PN['align_precision'],
                             curr_PN['simplicity'],
-                            curr_stoch['ER'], 
+                            curr_stoch['ER'],
+                            curr_stoch['ER_sum'],
                             curr_graph_simplicity['graph_density'], curr_graph_simplicity['graph_entropy']]
             df.loc[df.shape[0]] = curr_results
 
             # Accumulate weighted sums for each metric
             total_traces += num_traces
             for col in columns[3:]:
-                weighted_sums[col] += num_traces * curr_results[columns.index(col)]
+                if col in ['replay_fitness', 'replay_precision', 'align_fitness', 'align_precision', 'simplicity', 'ER','graph_density', 'graph_entropy']:
+                    weighted_sums[col] += num_traces * curr_results[columns.index(col)]
+                elif col in ['ER_sum']:
+                    weighted_sums[col] += curr_results[columns.index(col)]  # ER_sum is already a sum, no need to weigh
             
         # Calculate averages
         averages = [method, 'average', total_traces]
         for col in columns[3:]:
-            averages.append(weighted_sums[col] / total_traces)
+            if col in ['replay_fitness', 'replay_precision', 'align_fitness', 'align_precision', 'simplicity', 'ER', 'graph_density', 'graph_entropy']:
+                averages.append(weighted_sums[col] / total_traces)
+            elif col in ['ER_sum']:
+                averages.append(weighted_sums[col]) # ER_sum is a sum, we don't want to weigh it
         df.loc[df.shape[0]] = averages
         df.to_csv(results_loc, index=False)  # Save after averages
         print(df)
@@ -118,14 +127,14 @@ Method & Replay Fitness & Replay Precision & Align Fitness & Align Precision & S
 
     # Add Baseline Results
     baseline_row = df.iloc[0]  # First row should be the baseline (full log)
-    latex_code += f"Full Log & {baseline_row['replay_fitness']:.3f} & {baseline_row['replay_precision']:.3f} & {baseline_row['align_fitness']:.3f} & {baseline_row['align_precision']:.3f} & {baseline_row['simplicity']:.3f} & {baseline_row['ER']:.3f} & {baseline_row['graph_density']:.3f} & {baseline_row['graph_entropy']:.3f} \\\\ \n"
+    latex_code += f"Full Log & {baseline_row['replay_fitness']:.3f} & {baseline_row['replay_precision']:.3f} & {baseline_row['align_fitness']:.3f} & {baseline_row['align_precision']:.3f} & {baseline_row['simplicity']:.3f} & {baseline_row['ER']:.3f} & {baseline_row['ER_sum']:.0f} & {baseline_row['graph_density']:.3f} & {baseline_row['graph_entropy']:.3f} \\\\ \n"
 
     # Add Weighted Averages for each method
     for method in df['method'].unique():
         if method != 'full_log':  # Skip the baseline row
             method_rows = df[df['method'] == method]
             weighted_avg_row = method_rows.iloc[-1]  # Last row for weighted averages
-            latex_code += f"{method} & {weighted_avg_row['replay_fitness']:.3f} & {weighted_avg_row['replay_precision']:.3f} & {weighted_avg_row['align_fitness']:.3f} & {weighted_avg_row['align_precision']:.3f} & {weighted_avg_row['simplicity']:.3f} & {weighted_avg_row['ER']:.3f} & {weighted_avg_row['graph_density']:.3f} & {weighted_avg_row['graph_entropy']:.3f} \\\\ \n"
+            latex_code += f"{method} & {weighted_avg_row['replay_fitness']:.3f} & {weighted_avg_row['replay_precision']:.3f} & {weighted_avg_row['align_fitness']:.3f} & {weighted_avg_row['align_precision']:.3f} & {weighted_avg_row['simplicity']:.3f} & {weighted_avg_row['ER']:.0f} & {weighted_avg_row['ER_sum']:.3f} & {weighted_avg_row['graph_density']:.3f} & {weighted_avg_row['graph_entropy']:.3f} \\\\ \n"
 
     latex_code += """
 \\hline

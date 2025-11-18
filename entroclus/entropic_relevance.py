@@ -4,6 +4,7 @@ from entroclus import utils as utils
 def get_ER(variant_log, activity_counts, edge_counts):
     """
     Calculate the Entropic Relevance (ER) value for a given variant log, activity counts, and edge counts (last two together dfg).
+    #! This is the average ER over all traces in the log
 
     Parameters:
     - variant_log (dict): A dictionary where the keys are variants (sequences of activities) and the values are the occurrences of each variant in the log.
@@ -23,6 +24,27 @@ def get_ER(variant_log, activity_counts, edge_counts):
         total_occurences += occurrence
     ER = ER_sum/total_occurences
     return ER
+
+def get_ER_sum(variant_log, activity_counts, edge_counts):
+    """
+    Calculate the Entropic Relevance (ER) value for a given variant log, activity counts, and edge counts (last two together dfg).
+    #! This is the total ER over all traces in the log
+
+    Parameters:
+    - variant_log (dict): A dictionary where the keys are variants (sequences of activities) and the values are the occurrences of each variant in the log.
+    - activity_counts (dict): A dictionary containing the counts of each activity in the graph.
+    - edge_counts (dict): A dictionary containing the counts of each edge in the graph.
+
+    Returns:
+    - float: The ER value for the given variant log, activity counts, and edge counts.
+    """
+    ER_sum = 0.0
+    for variant, occurrence in variant_log.items():
+        prob = utils.get_probability(activity_counts, edge_counts, variant)
+        #use this for the logs where probabilities get too small
+        prob = max(prob, 1e-10)
+        ER_sum += (-math.log(prob, 2))*occurrence
+    return ER_sum
 
 def get_ER_normalized(variant_log, activity_counts, edge_counts):
     """
