@@ -39,7 +39,6 @@ The folder `entroclus` contains the code for the clustering algorithm.
 │   ├── experimental_results_elbow/      # Results for elbow experiments
 │   ├── experimental_results_one_cluster_size/ # Results for fixed cluster size experiments
 │   ├── evaluate_clusters_one_cluster_size.py  # Evaluation script
-│   ├── format_tables.py                 # Table formatting for results
 │   ├── get_average_ranks.py             # Compute average ranks
 │   ├── get_average_ranks_statistical_test.py # Statistical tests on ranks
 │   ├── get_clusters_one_cluster_size.py # Get clusters for fixed size
@@ -48,7 +47,6 @@ The folder `entroclus` contains the code for the clustering algorithm.
 │   ├── plot_elbow_experiment.py         # Plotting elbow experiment results
 │   ├── reproduce_experiments.py         # Script to rerun all experiments
 │   ├── run_elbow_experiment.py          # Run elbow experiment
-│   └── stats_test.py                    # Statistical testing
 ├── requirements.txt                # Python dependencies
 ├── README.md                       # This file
 ```
